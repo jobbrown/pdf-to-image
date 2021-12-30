@@ -25,6 +25,8 @@ class Pdf
 
     protected $layerMethod = Imagick::LAYERMETHOD_FLATTEN;
 
+    protected $imageUnits = Imagick::RESOLUTION_PIXELSPERINCH;
+
     protected $colorspace;
 
     protected $compressionQuality;
@@ -163,6 +165,8 @@ class Pdf
 
         $this->imagick->readImage(sprintf('%s[%s]', $this->pdfFile, $this->page - 1));
 
+        $this->imagick->setImageUnits($this->imageUnits);
+
         if (is_int($this->layerMethod)) {
             $this->imagick = $this->imagick->mergeImageLayers($this->layerMethod);
         }
@@ -170,6 +174,13 @@ class Pdf
         $this->imagick->setFormat($this->determineOutputFormat($pathToImage));
 
         return $this->imagick;
+    }
+
+    public function setImageUnits(int $imageUnits)
+    {
+        $this->imageUnits = $imageUnits;
+
+        return $this;
     }
 
     public function setColorspace(int $colorspace)
